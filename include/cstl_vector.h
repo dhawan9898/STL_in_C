@@ -80,7 +80,6 @@ struct vector_##type { \
 \
 static inline void vector_##type##_init(vector_##type* vector) { \
     vector->data = (type*)CSTL_MALLOC(CSTL_VECTOR_INITIAL_CAPACITY * sizeof(type)); \
-    memset(vector->data, 0, CSTL_VECTOR_INITIAL_CAPACITY * sizeof(type)); \
     vector->size = 0; \
     vector->capacity = CSTL_VECTOR_INITIAL_CAPACITY; \
 } \
@@ -120,7 +119,6 @@ static inline int vector_##type##_push_back(vector_##type* vector, type d) { \
     CSTL_CHECK(!vector, "push_back: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
     if(vector->size >= vector->capacity) { \
         if (vector_##type##_reserve(vector, vector->capacity * 2) != CSTL_SUCCESS) return CSTL_ERROR_ALLOCATION; \
-        memset(vector->data + vector->size, 0, (vector->capacity - vector->size) * sizeof(type)); /* Optional: Clear new elements */ \
     } \
     vector->data[vector->size++] = d; \
     return CSTL_SUCCESS; \

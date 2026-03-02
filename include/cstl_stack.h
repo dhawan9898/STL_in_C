@@ -7,7 +7,7 @@
 
 /**
  * CSTL_STACK(type)
- * ================
+ * ================ 
  *
  * DESCRIPTION
  *   Generic type-safe LIFO stack (Last-In-First-Out) macro for C. Implements
@@ -25,6 +25,7 @@
  *   Stack Operations:
  *   - stack_<type>_push(s, val)      Push value onto stack (returns int)
  *   - stack_<type>_pop(s)            Pop top value from stack (returns int)
+ *   - stack_<type>_pop_value(s, out) Pop value into an out-parameter
  *   - stack_<type>_top(s)            Get pointer to top element without removing
  *   - stack_<type>_size(s)           Get current number of elements
  *   - stack_<type>_capacity(s)       Get allocated capacity
@@ -119,6 +120,16 @@ static inline int stack_##type##_pop(stack_##type* stack) { \
     CSTL_CHECK(!stack, "pop: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
     CSTL_CHECK(stack->size == 0, "pop: Empty", CSTL_ERROR_EMPTY); \
     \
+    stack->data[stack->size - 1] = (type){0}; \
+    stack->size--; \
+    return CSTL_SUCCESS; \
+} \
+\
+static inline int stack_##type##_pop_value(stack_##type* stack, type* value_out) { \
+    CSTL_CHECK(!stack || !value_out, "pop_value: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
+    CSTL_CHECK(stack->size == 0, "pop_value: Empty", CSTL_ERROR_EMPTY); \
+    \
+    *value_out = stack->data[stack->size - 1]; \
     stack->data[stack->size - 1] = (type){0}; \
     stack->size--; \
     return CSTL_SUCCESS; \

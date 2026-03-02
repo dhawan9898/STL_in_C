@@ -76,6 +76,18 @@ int main(void) {
         printf("Reserved capacity 50: new capacity=%zu\n", stack_int_capacity(&si));
     }
 
+    /* Test pop_value */
+    printf("\nTesting pop_value...\n");
+    int val_out;
+    if (stack_int_pop_value(&si, &val_out) == CSTL_SUCCESS) {
+        printf("Popped value: %d (expected 300), new size: %zu\n", val_out, stack_int_size(&si));
+    }
+    stack_int_pop_value(&si, &val_out);
+    stack_int_pop_value(&si, &val_out);
+    ret = stack_int_pop_value(&si, &val_out);
+    printf("Pop_value on empty stack returned: %d (expected %d)\n", ret, CSTL_ERROR_EMPTY);
+
+
     stack_int_destroy(&si);
     printf("Stack destroyed.\n\n");
 

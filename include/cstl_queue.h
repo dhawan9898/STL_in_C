@@ -7,7 +7,7 @@
 
 /**
  * CSTL_QUEUE(type)
- * ================
+ * ================ 
  *
  * DESCRIPTION
  *   Generic type-safe FIFO queue (First-In-First-Out) macro for C. Implements
@@ -16,15 +16,16 @@
  *   dependencies on vector or other containers.
  *
  * GENERATED FUNCTIONS (where <type> is the instantiated type)
- *
+ * 
  *   Initialization & Destruction:
  *   - queue_<type>_init(q)           Initialize queue with default capacity
  *   - queue_<type>_destroy(q)        Free internal storage and reset state
  *   - queue_<type>_reserve(q, n)     Reserve capacity for at least n elements
- *
+ * 
  *   Queue Operations:
  *   - queue_<type>_enqueue(q, val)   Add value to back of queue (returns int)
  *   - queue_<type>_dequeue(q)        Remove value from front (returns int)
+ *   - queue_<type>_dequeue_value(q, out) Dequeue value into an out-parameter
  *   - queue_<type>_front(q)          Get pointer to front element without removing
  *   - queue_<type>_back(q)           Get pointer to back element without removing
  *   - queue_<type>_size(q)           Get current number of elements
@@ -149,6 +150,17 @@ static inline int queue_##type##_dequeue(queue_##type* queue) { \
     CSTL_CHECK(!queue, "dequeue: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
     CSTL_CHECK(queue->size == 0, "dequeue: Empty", CSTL_ERROR_EMPTY); \
     \
+    queue->data[queue->front_idx] = (type){0}; \
+    queue->front_idx = (queue->front_idx + 1) % queue->capacity; \
+    queue->size--; \
+    return CSTL_SUCCESS; \
+} \
+\
+static inline int queue_##type##_dequeue_value(queue_##type* queue, type* value_out) { \
+    CSTL_CHECK(!queue || !value_out, "dequeue_value: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
+    CSTL_CHECK(queue->size == 0, "dequeue_value: Empty", CSTL_ERROR_EMPTY); \
+    \
+    *value_out = queue->data[queue->front_idx]; \
     queue->data[queue->front_idx] = (type){0}; \
     queue->front_idx = (queue->front_idx + 1) % queue->capacity; \
     queue->size--; \
