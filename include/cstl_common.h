@@ -43,9 +43,11 @@ typedef enum {
 #ifndef CSTL_NO_CHECKS
 #define CSTL_CHECK(cond, msg, err) do { if (cond) { CSTL_LOG(msg); return err; } } while(0)
 #define CSTL_CHECK_PTR_RET(cond, msg) do { if (cond) { CSTL_LOG(msg); return NULL; } } while(0)
+#define CSTL_CHECK_VOID(cond, msg) do { if (cond) { CSTL_LOG(msg); return; } } while(0)
 #else
 #define CSTL_CHECK(cond, msg, err) do {} while(0)
 #define CSTL_CHECK_PTR_RET(cond, msg) do {} while(0)
+#define CSTL_CHECK_VOID(cond, msg) do {} while(0)
 #endif
 
 /* ----------------------------------------------------------------------------- */

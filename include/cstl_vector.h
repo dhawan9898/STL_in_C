@@ -197,12 +197,10 @@ static inline void vector_##type##_sort(vector_##type* vector) { \
     if (vector) qsort(vector->data, vector->size, sizeof(type), compare_##type); \
     else { \
        if (!vector) CSTL_LOG("sort: NULL"); \
-       else if (!compare_##type) CSTL_LOG("sort: No compare"); \
     } \
 } \
 static inline int vector_##type##_find(const vector_##type* vector, type val, size_t* idx) { \
     CSTL_CHECK(!vector, "find: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
-    CSTL_CHECK(!compare_##type, "find: No compare", CSTL_ERROR_INVALID_ARGUMENT); \
     for (size_t i = 0; i < vector->size; ++i) { \
         if (compare_##type(&vector->data[i], &val) == 0) { if(idx)*idx=i; return CSTL_SUCCESS; } \
     } \
@@ -210,7 +208,6 @@ static inline int vector_##type##_find(const vector_##type* vector, type val, si
 } \
 static inline int vector_##type##_binary_search(const vector_##type* vector, type val, size_t* idx) { \
     CSTL_CHECK(!vector, "bin_search: NULL", CSTL_ERROR_INVALID_ARGUMENT); \
-    CSTL_CHECK(!compare_##type, "bin_search: No compare", CSTL_ERROR_INVALID_ARGUMENT); \
     void* r = bsearch(&val, vector->data, vector->size, sizeof(type), compare_##type); \
     if (r) { if(idx)*idx=(size_t)((type*)r - vector->data); return CSTL_SUCCESS; } \
     return CSTL_ERROR_NOT_FOUND; \
